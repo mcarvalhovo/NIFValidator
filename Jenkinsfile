@@ -20,5 +20,13 @@ pipeline {
                 """
             }            
         }
+        stage ('build') {
+            steps {
+                sh"""
+                    docker build -t th3o4k/nif-validator .
+                """
+            }
+        }
+        
     }
 }
