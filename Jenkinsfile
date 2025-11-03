@@ -16,7 +16,9 @@ pipeline {
             }
             steps {
                 sh"""
+                export path="$HOME/.local/bin:${PATH}"
                     pip install -r requirements.txt
+                    pip install -r requirements-test.txt
                 """
             }            
         }
@@ -25,6 +27,23 @@ pipeline {
                 sh"""
                     docker build -t th3o4k/nif-validator .
                 """
+            }
+        }
+        stage ("Unit test") {
+            agent {
+                docker {
+                    image 'python:3.11-slim'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh'pytest --junitxml result.xml tests/'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'result.xml',
+                    fingerprint: true, junit: 'result.xml'
+                }
             }
         }
         stage ('Deliver') {
@@ -41,7 +60,7 @@ pipeline {
                     }
             }
         }
-                stage('Deploy') {
+        stage('Deploy') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'docker-id',
@@ -55,6 +74,6 @@ pipeline {
                     }
                 }
             }
-        }            
+        }                 
     }
 }
