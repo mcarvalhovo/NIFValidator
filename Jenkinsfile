@@ -22,7 +22,7 @@ pipeline {
                 """
             }            
         }
-                stage('Unit test') {
+        stage('Unit test') {
             agent {
                docker {
                     image 'python:3.11-slim'
@@ -30,7 +30,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'pyton3 -m pytest --junitxml result.xml tests/'
+                sh 'python3 -m pytest --junitxml result.xml tests/'
             }
             post {
                 always {
