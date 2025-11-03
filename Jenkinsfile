@@ -39,9 +39,14 @@ pipeline {
                         docker push ${username}/${JOB_BASE_NAME}
                     """
                     }
-
             }
         }        
-        
+        stage('Deploy') {
+            steps{
+                sh"""
+                    ssh redhat@172.31.33.100 docker --version
+                """
+            }
+        }
     }
 }
