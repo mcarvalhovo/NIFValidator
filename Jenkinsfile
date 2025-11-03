@@ -37,7 +37,7 @@ stage('Unit test') {
                 }
             }
             steps {
-                sh 'pytest --junitxml result.xml tests/'
+                sh 'pyton3 -m pytest --junitxml result.xml tests/'
             }
             post {
                 always {
