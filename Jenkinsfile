@@ -22,14 +22,7 @@ pipeline {
                 """
             }            
         }
-        stage ('build') {
-            steps {
-                sh"""
-                    docker build -t th3o4k/nif-validator .
-                """
-            }
-        }
-stage('Unit test') {
+                stage('Unit test') {
             agent {
                docker {
                     image 'python:3.11-slim'
@@ -46,6 +39,13 @@ stage('Unit test') {
                 // Publish JUnit test results
                 junit 'result.xml'
                 }
+            }
+        }
+        stage ('build') {
+            steps {
+                sh"""
+                    docker build -t th3o4k/nif-validator .
+                """
             }
         }
         stage ('Deliver') {
